@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Análise de Concorrentes - CCAA Araruama</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F5F7FA;
+      --surface: #FFFFFF;
+      --text: #172033;
+      --text-sec: #4A5568;
+      --blue: #2563EB;
+      --blue-light: #DBEAFE;
+      --green: #059669;
+      --green-light: #D1FAE5;
+      --amber: #D97706;
+      --amber-light: #FEF3C7;
+      --red: #DC2626;
+      --red-light: #FEE2E2;
+      --border: #E2E8F0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #1E3A5F, #2563EB);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    header p {
+      opacity: 0.9;
+      font-size: 15px;
+    }
+    header .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      margin-top: 16px;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .card h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card h2 .icon { font-size: 24px; }
+
+    /* ESCOLA CARDS */
+    .escola-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .escola-card {
+      background: var(--surface);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border: 1px solid var(--border);
+    }
+    .escola-header {
+      padding: 20px;
+      color: white;
+    }
+    .escola-header.cna { background: linear-gradient(135deg, #2A78D6, #1E5BA3); }
+    .escola-header.cultura { background: linear-gradient(135deg, #E86A33, #D4501A); }
+    .escola-header.wizard { background: linear-gradient(135deg, #10B981, #059669); }
+    .escola-header.yes { background: linear-gradient(135deg, #F59E0B, #D97706); }
+    .escola-header h3 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .escola-header .tag {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .escola-body {
+      padding: 20px;
+    }
+    .escola-section {
+      margin-bottom: 16px;
+    }
+    .escola-section:last-child { margin-bottom: 0; }
+    .escola-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-sec);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .valor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .valor-item {
+      background: var(--bg);
+      padding: 12px;
+      border-radius: 10px;
+    }
+    .valor-item .label {
+      font-size: 11px;
+      color: var(--text-sec);
+      margin-bottom: 4px;
+    }
+    .valor-item .value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .valor-item .value.desconto {
+      color: var(--green);
+    }
+    .valor-item .value.destaque {
+      color: var(--blue);
+      font-size: 18px;
+    }
+    .valor-item.full-width {
+      grid-column: span 2;
+    }
+
+    /* DIFERENCIAIS */
+    .diferenciais {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .diferencial-tag {
+      background: var(--blue-light);
+      color: var(--blue);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* HORÁRIOS */
+    .horario-info {
+      background: var(--bg);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      color: var(--text-sec);
+    }
+    .horario-info strong { color: var(--text); }
+
+    /* STATUS */
+    .status {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .status.confirmado { background: var(--green-light); color: var(--green); }
+    .status.promocao { background: var(--amber-light); color: var(--amber); }
+    .status.pendente { background: var(--red-light); color: var(--red); }
+
+    /* TABELA COMPARATIVA */
+    .tabela-comp {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .tabela-comp th,
+    .tabela-comp td {
+      padding: 14px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .tabela-comp th {
+      background: var(--bg);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-sec);
+      text-transform: uppercase;
+    }
+    .tabela-comp td { color: var(--text); }
+    .tabela-comp tr:hover { background: var(--bg); }
+    .tabela-comp .destaque {
+      background: var(--green-light);
+      font-weight: 600;
+    }
+
+    /* CALCULADORA */
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    @media (max-width: 768px) {
+      .calc-grid { grid-template-columns: 1fr; }
+    }
+    .calc-form {
+      background: var(--bg);
+      padding: 24px;
+      border-radius: 16px;
+    }
+    .calc-form h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-sec);
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--blue-light);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--blue);
+      color: white;
+      width: 100%;
+    }
+    .btn-primary:hover { background: #1D4ED8; }
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text-sec);
+      width: 100%;
+      margin-top: 10px;
+    }
+    .btn-secondary:hover { background: var(--border); }
+
+    .calc-resultado {
+      text-align: center;
+      padding: 30px;
+      border-radius: 16px;
+      display: none;
+    }
+    .calc-resultado.abaixo {
+      background: var(--green-light);
+      border: 2px solid var(--green);
+    }
+    .calc-resultado.alinhado {
+      background: var(--blue-light);
+      border: 2px solid var(--blue);
+    }
+    .calc-resultado.acima {
+      background: var(--red-light);
+      border: 2px solid var(--red);
+    }
+    .calc-resultado.show { display: block; }
+    .calc-resultado .icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+    .calc-resultado h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+    .calc-resultado.abaixo h3 { color: var(--green); }
+    .calc-resultado.alinhado h3 { color: var(--blue); }
+    .calc-resultado.acima h3 { color: var(--red); }
+    .calc-resultado .valor {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 12px 0;
+    }
+    .calc-resultado .comparacao {
+      font-size: 13px;
+      color: var(--text-sec);
+    }
+
+    /* ALERTAS */
+    .alerta {
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .alerta.pendente {
+      background: var(--amber-light);
+      border-left: 4px solid var(--amber);
+    }
+    .alerta.info {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+    }
+    .alerta .icon { font-size: 20px; }
+    .alerta .text { font-size: 14px; }
+    .alerta .text strong { display: block; margin-bottom: 4px; }
+
+    /* TABS */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .tab {
+      padding: 10px 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .tab.active {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue);
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: var(--text-sec);
+      font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 22px; }
+      .escola-grid { grid-template-columns: 1fr; }
+      .tabela-comp { font-size: 12px; }
+      .tabela-comp th, .tabela-comp td { padding: 10px 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📊 Análise de Concorrentes</h1>
+    <p>Escolas de Idiomas em Araruama/RJ — CCAA vs CNA vs Cultura vs Wizard vs YES</p>
+    <span class="badge">📅 Dados coletados em Ago/2026</span>
+  </header>
+
+  <div class="container">
+    <!-- ALERTAS -->
+    <div class="alerta pendente">
+      <span class="icon">⚠️</span>
+      <div class="text">
+        <strong>Dados Pendentes — YES Idiomas</strong>
+        A mensalidade da YES não foi informada no atendimento. Não é possível comparar custos totais até confirmação.
+      </div>
+    </div>
+
+    <div class="alerta info">
+      <span class="icon">💡</span>
+      <div class="text">
+        <strong>Mensalidade não é o custo total!</strong>
+        Além da mensalidade, considere: taxa de matrícula + material didático + número de parcelas.
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('adulto')">👨‍💼 Adulto</button>
+      <button class="tab" onclick="showTab('kids')">👧 Kids</button>
+      <button class="tab" onclick="showTab('comparativo')">📊 Tabela</button>
+      <button class="tab" onclick="showTab('calc')">🧮 Calculadora</button>
+    </div>
+
+    <!-- ADULTO -->
+    <div id="tab-adulto" class="tab-content">
+      <div class="escola-grid">
+
+        <!-- CNA -->
+        <div class="escola-card">
+          <div class="escola-header cna">
+            <h3>CNA Idiomas</h3>
+            <span class="tag">Online ao Vivo</span>
+          </div>
+          <div class="escola-body">
+            <div class="escola-section">
+              <div class="escola-section-title">Valores</div>
+              <div class="valor-grid">
+                <div class="valor-item">
+                  <div class="label">Taxa de Matrícula</div>
+                  <div class="value">R$ 160,00</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Parcelas</div>
+                  <div class="value">12x</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Valor da Parcela</div>
+                  <div class="value destaque">R$ 305,43</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Total Curso</div>
+                  <div class="value">R$ 3.665,16</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Material Semestral</div>
+                  <div class="value">6x R$ 70,65</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Material Anual (2 kits)</div>
+                  <div class="value">12x R$ 66,23</div>
+                </div>
+                <div class="valor-item full-width">
+                  <div class="label">💰 Custo Total Estimado (anual)</div>
+                  <div class="value">R$ 4.560,92</div>
+                </div>
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Horário</div>
+              <div class="horario-info">
+                <strong>Seg / Qua</strong> — 19:30 às 20:45
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Diferenciais</div>
+              <div class="diferenciais">
+                <span class="diferencial-tag">🎯 Atendimento Consultivo</span>
+                <span class="diferencial-tag">📚 Material Disney Kids</span>
+                <span class="diferencial-tag">🤖 Curso de IA Grátis</span>
+                <span class="diferencial-tag">📱 Curso de Redes Sociais</span>
+                <span class="diferencial-tag">👥 Indicação 5% desconto</span>
+              </div>
+            </div>
+            <div class="escola-section">
+              <span class="status confirmado">✓ Confirmado — 19/08/2026</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CULTURA INGLESA -->
+        <div class="escola-card">
+          <div class="escola-header cultura">
+            <h3>Cultura Inglesa</h3>
+            <span class="tag">Presencial</span>
+          </div>
+          <div class="escola-body">
+            <div class="escola-section">
+              <div class="escola-section-title">Valores (Módulo Semestral)</div>
+              <div class="valor-grid">
+                <div class="valor-item">
+                  <div class="label">Valor Cheio</div>
+                  <div class="value" style="text-decoration: line-through;">R$ 3.322,17</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">c/ 40% Desconto</div>
+                  <div class="value desconto destaque">R$ 1.993,30</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Parcelas</div>
+                  <div class="value">6x de R$ 332,21</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">1ª Parcela (c/ voucher)</div>
+                  <div class="value">R$ 232,21</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Material</div>
+                  <div class="value">7x R$ 56,43</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Parcela Grátis</div>
+                  <div class="value desconto">✓ Sim</div>
+                </div>
+                <div class="valor-item full-width">
+                  <div class="label">💰 Custo Semestral Total</div>
+                  <div class="value">R$ 2.388,31</div>
+                </div>
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Horário</div>
+              <div class="horario-info">
+                <strong>Seg / Qua</strong> — 19:30 às 20:45
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Diferenciais</div>
+              <div class="diferenciais">
+                <span class="diferencial-tag">💬 Foco em Comunicação</span>
+                <span class="diferencial-tag">🧠 Pensamento Crítico</span>
+                <span class="diferencial-tag">🎯 Resolução de Problemas</span>
+                <span class="diferencial-tag">💚 Desconto Permanente</span>
+              </div>
+            </div>
+            <div class="escola-section">
+              <span class="status promocao">⏰ Promoção até 21/08/2026</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- WIZARD -->
+        <div class="escola-card">
+          <div class="escola-header wizard">
+            <h3>Wizard</h3>
+            <span class="tag">Presencial</span>
+          </div>
+          <div class="escola-body">
+            <div class="escola-section">
+              <div class="escola-section-title">Valores</div>
+              <div class="valor-grid">
+                <div class="valor-item">
+                  <div class="label">Taxa de Matrícula</div>
+                  <div class="value" style="text-decoration: line-through;">R$ 200,00</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">c/ Desconto</div>
+                  <div class="value desconto">R$ 99,00</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Mensalidade 12x</div>
+                  <div class="value destaque">R$ 255,42</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Total Curso</div>
+                  <div class="value">R$ 3.065,04</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Material Anual</div>
+                  <div class="value">6x R$ 231,00</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">WizPen</div>
+                  <div class="value desconto">R$ 352,00 (grátis)</div>
+                </div>
+                <div class="valor-item full-width">
+                  <div class="label">💰 Custo Total Estimado</div>
+                  <div class="value">R$ 4.550,04</div>
+                </div>
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Horário</div>
+              <div class="horario-info">
+                <strong>2h semanais</strong> —Flexível (1 ou 2 dias)
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Diferenciais</div>
+              <div class="diferenciais">
+                <span class="diferencial-tag">🖊️ WizPen (R$ 352)</span>
+                <span class="diferencial-tag">✅ Garantia de Aprendizado</span>
+                <span class="diferencial-tag">🔄 Reforço Grátis</span>
+                <span class="diferencial-tag">⚡ Flexibilidade</span>
+              </div>
+            </div>
+            <div class="escola-section">
+              <span class="status promocao">⏰ "Última semana" (12/08)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- YES -->
+        <div class="escola-card">
+          <div class="escola-header yes">
+            <h3>YES Idiomas</h3>
+            <span class="tag">Presencial</span>
+          </div>
+          <div class="escola-body">
+            <div class="escola-section">
+              <div class="escola-section-title">Valores</div>
+              <div class="valor-grid">
+                <div class="valor-item">
+                  <div class="label">Taxa (por pessoa)</div>
+                  <div class="value" style="text-decoration: line-through;">R$ 300,00</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">c/ Bolsa Irmãos</div>
+                  <div class="value desconto">R$ 100,00</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Material 1 Sem.</div>
+                  <div class="value">6x R$ 92,39</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Material 2 Sem.</div>
+                  <div class="value">12x R$ 85,48</div>
+                </div>
+                <div class="valor-item full-width">
+                  <div class="label">PIX 5% desconto</div>
+                  <div class="value">R$ 526,62 (1 sem) / R$ 974,51 (2 sem)</div>
+                </div>
+                <div class="valor-item full-width" style="background: var(--red-light);">
+                  <div class="label">⚠️ Mensalidade</div>
+                  <div class="value" style="color: var(--red);">PENDENTE — NÃO INFORMADO</div>
+                </div>
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Horário</div>
+              <div class="horario-info">
+                <strong>Seg / Qua</strong> — 19:15 às 20:30
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Diferenciais</div>
+              <div class="diferenciais">
+                <span class="diferencial-tag">👨‍👩‍👧 Bolsa Irmãos 66%</span>
+                <span class="diferencial-tag">💳 PIX 5% off</span>
+                <span class="diferencial-tag">📦 Kits Modulares</span>
+              </div>
+            </div>
+            <div class="escola-section">
+              <span class="status pendente">❌ Mensalidade pendente</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KIDS -->
+    <div id="tab-kids" class="tab-content" style="display: none;">
+      <div class="escola-grid">
+
+        <!-- CNA KIDS -->
+        <div class="escola-card">
+          <div class="escola-header cna">
+            <h3>CNA Kids</h3>
+            <span class="tag">Presencial</span>
+          </div>
+          <div class="escola-body">
+            <div class="escola-section">
+              <div class="escola-section-title">Valores</div>
+              <div class="valor-grid">
+                <div class="valor-item">
+                  <div class="label">Parcelas</div>
+                  <div class="value">11x</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Valor da Parcela</div>
+                  <div class="value destaque">R$ 330,00</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Total Curso</div>
+                  <div class="value">R$ 3.630,00</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Material</div>
+                  <div class="value">Mesmo valor adulto</div>
+                </div>
+                <div class="valor-item full-width">
+                  <div class="label">💰 Custo Total Estimado</div>
+                  <div class="value">R$ 4.524,76</div>
+                </div>
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Horário</div>
+              <div class="horario-info">
+                <strong>Seg / Qua</strong> — 18:00 às 19:00
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Diferenciais</div>
+              <div class="diferenciais">
+                <span class="diferencial-tag">🎨 Material Disney</span>
+                <span class="diferencial-tag">🎮 Jogos em Inglês</span>
+                <span class="diferencial-tag">📖 Livro Grande e Intuitivo</span>
+              </div>
+            </div>
+            <div class="escola-section">
+              <span class="status confirmado">✓ Confirmado — 19/08/2026</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CULTURA KIDS -->
+        <div class="escola-card">
+          <div class="escola-header cultura">
+            <h3>Cultura Kids (Junior)</h3>
+            <span class="tag">Presencial</span>
+          </div>
+          <div class="escola-body">
+            <div class="escola-section">
+              <div class="escola-section-title">Valores (Módulo Semestral)</div>
+              <div class="valor-grid">
+                <div class="valor-item">
+                  <div class="label">Valor Cheio</div>
+                  <div class="value" style="text-decoration: line-through;">R$ 2.889,68</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">c/ 40% Desconto</div>
+                  <div class="value desconto destaque">R$ 1.733,80</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Parcelas</div>
+                  <div class="value">6x de R$ 288,96</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">1ª Parcela</div>
+                  <div class="value">R$ 188,96</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Material</div>
+                  <div class="value">7x R$ 56,43</div>
+                </div>
+                <div class="valor-item full-width">
+                  <div class="label">💰 Custo Semestral Total</div>
+                  <div class="value">R$ 2.128,81</div>
+                </div>
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Horário</div>
+              <div class="horario-info">
+                <strong>Seg / Qua</strong> — 15:00 às 16:00
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Diferenciais</div>
+              <div class="diferenciais">
+                <span class="diferencial-tag">🎨 Projetos Criativos</span>
+                <span class="diferencial-tag">💼 Empreendedorismo</span>
+                <span class="diferencial-tag">🗣️ Situações Reais</span>
+              </div>
+            </div>
+            <div class="escola-section">
+              <span class="status promocao">⏰ Promoção até 21/08/2026</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- WIZARD KIDS -->
+        <div class="escola-card">
+          <div class="escola-header wizard">
+            <h3>Wizard Kids (K2)</h3>
+            <span class="tag">Presencial</span>
+          </div>
+          <div class="escola-body">
+            <div class="escola-section">
+              <div class="escola-section-title">Valores</div>
+              <div class="valor-grid">
+                <div class="valor-item">
+                  <div class="label">Taxa</div>
+                  <div class="value desconto">R$ 99,00</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Parcelas</div>
+                  <div class="value">12x</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Valor da Parcela</div>
+                  <div class="value destaque">R$ 192,55</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Total Curso</div>
+                  <div class="value">R$ 2.310,60</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Material</div>
+                  <div class="value">6x R$ 231,00</div>
+                </div>
+                <div class="valor-item full-width">
+                  <div class="label">💰 Custo Total Estimado</div>
+                  <div class="value">R$ 3.795,60</div>
+                </div>
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Diferenciais</div>
+              <div class="diferenciais">
+                <span class="diferencial-tag">🖊️ WizPen (R$ 352)</span>
+                <span class="diferencial-tag">✅ Garantia de Aprendizado</span>
+                <span class="diferencial-tag">🔄 Reforço Grátis</span>
+              </div>
+            </div>
+            <div class="escola-section">
+              <span class="status promocao">⏰ "Última semana" (12/08)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- YES KIDS -->
+        <div class="escola-card">
+          <div class="escola-header yes">
+            <h3>YES Kids</h3>
+            <span class="tag">Presencial</span>
+          </div>
+          <div class="escola-body">
+            <div class="escola-section">
+              <div class="escola-section-title">Valores</div>
+              <div class="valor-grid">
+                <div class="valor-item">
+                  <div class="label">Taxa (por pessoa)</div>
+                  <div class="value desconto">R$ 100,00</div>
+                </div>
+                <div class="valor-item">
+                  <div class="label">Material 1 Sem.</div>
+                  <div class="value">6x R$ 92,39</div>
+                </div>
+                <div class="valor-item full-width" style="background: var(--red-light);">
+                  <div class="label">⚠️ Mensalidade</div>
+                  <div class="value" style="color: var(--red);">PENDENTE</div>
+                </div>
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Horário</div>
+              <div class="horario-info">
+                <strong>Ter / Qui</strong> — 18:00 às 19:00
+              </div>
+            </div>
+            <div class="escola-section">
+              <div class="escola-section-title">Diferenciais</div>
+              <div class="diferenciais">
+                <span class="diferencial-tag">👨‍👩‍👧 Bolsa Irmãos 66%</span>
+                <span class="diferencial-tag">💳 PIX 5% off</span>
+              </div>
+            </div>
+            <div class="escola-section">
+              <span class="status pendente">❌ Mensalidade pendente</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPARATIVO -->
+    <div id="tab-comparativo" class="tab-content" style="display: none;">
+      <div class="card">
+        <h2><span class="icon">📊</span> Tabela Comparativa — Adulto</h2>
+        <div style="overflow-x: auto;">
+          <table class="tabela-comp">
+            <thead>
+              <tr>
+                <th>Escola</th>
+                <th>Matrícula</th>
+                <th>Mensalidade</th>
+                <th>Parcelas</th>
+                <th>Total Curso</th>
+                <th>Material</th>
+                <th>Custo Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>CNA</strong></td>
+                <td>R$ 160,00</td>
+                <td>R$ 305,43</td>
+                <td>12x</td>
+                <td>R$ 3.665,16</td>
+                <td>R$ 794,76</td>
+                <td class="destaque">R$ 4.560,92</td>
+              </tr>
+              <tr>
+                <td><strong>Cultura</strong></td>
+                <td>Incluída</td>
+                <td>R$ 332,21</td>
+                <td>6x</td>
+                <td>R$ 1.993,30</td>
+                <td>R$ 395,01</td>
+                <td>R$ 2.388,31*</td>
+              </tr>
+              <tr>
+                <td><strong>Wizard</strong></td>
+                <td>R$ 99,00</td>
+                <td>R$ 255,42</td>
+                <td>12x</td>
+                <td>R$ 3.065,04</td>
+                <td>R$ 1.386,00</td>
+                <td class="destaque">R$ 4.550,04</td>
+              </tr>
+              <tr>
+                <td><strong>YES</strong></td>
+                <td>R$ 100,00</td>
+                <td style="color: var(--red);">Pendente</td>
+                <td>—</td>
+                <td>—</td>
+                <td>R$ 554,34</td>
+                <td>—</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size: 12px; color: var(--text-sec); margin-top: 12px;">
+            * Cultura Inglesa = módulo semestral. Para comparar com contratos anuais, multiplique por 2.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2><span class="icon">📊</span> Tabela Comparativa — Kids</h2>
+        <div style="overflow-x: auto;">
+          <table class="tabela-comp">
+            <thead>
+              <tr>
+                <th>Escola</th>
+                <th>Matrícula</th>
+                <th>Mensalidade</th>
+                <th>Parcelas</th>
+                <th>Total Curso</th>
+                <th>Material</th>
+                <th>Custo Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>CNA</strong></td>
+                <td>—</td>
+                <td>R$ 330,00</td>
+                <td>11x</td>
+                <td>R$ 3.630,00</td>
+                <td>R$ 794,76</td>
+                <td class="destaque">R$ 4.424,76</td>
+              </tr>
+              <tr>
+                <td><strong>Cultura</strong></td>
+                <td>Incluída</td>
+                <td>R$ 288,96</td>
+                <td>6x</td>
+                <td>R$ 1.733,80</td>
+                <td>R$ 395,01</td>
+                <td>R$ 2.128,81*</td>
+              </tr>
+              <tr>
+                <td><strong>Wizard</strong></td>
+                <td>R$ 99,00</td>
+                <td>R$ 192,55</td>
+                <td>12x</td>
+                <td>R$ 2.310,60</td>
+                <td>R$ 1.386,00</td>
+                <td class="destaque">R$ 3.795,60</td>
+              </tr>
+              <tr>
+                <td><strong>YES</strong></td>
+                <td>R$ 100,00</td>
+                <td style="color: var(--red);">Pendente</td>
+                <td>—</td>
+                <td>—</td>
+                <td>R$ 554,34</td>
+                <td>—</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size: 12px; color: var(--text-sec); margin-top: 12px;">
+            * Cultura Inglesa = módulo semestral.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALCULADORA -->
+    <div id="tab-calc" class="tab-content" style="display: none;">
+      <div class="card">
+        <h2><span class="icon">🧮</span> Calculadora — Onde está o CCAA?</h2>
+        <p style="color: var(--text-sec); margin-bottom: 24px;">
+          Insira os valores do CCAA para ver onde você está em relação ao mercado.
+        </p>
+
+        <div class="calc-grid">
+          <div class="calc-form">
+            <h3>💰 Valores do CCAA</h3>
+
+            <div class="form-group">
+              <label>Taxa de Matrícula (R$)</label>
+              <input type="number" id="ccaa-matricula" placeholder="Ex: 100" min="0" step="0.01">
+            </div>
+
+            <div class="form-group">
+              <label>Mensalidade (R$)</label>
+              <input type="number" id="ccaa-mensalidade" placeholder="Ex: 250" min="0" step="0.01">
+            </div>
+
+            <div class="form-group">
+              <label>Número de Parcelas</label>
+              <input type="number" id="ccaa-parcelas" placeholder="Ex: 12" value="12" min="1" max="24">
+            </div>
+
+            <div class="form-group">
+              <label>Material Didático Total (R$)</label>
+              <input type="number" id="ccaa-material" placeholder="Ex: 400" min="0" step="0.01">
+            </div>
+
+            <button class="btn btn-primary" onclick="calcular()">
+              📊 Calcular Posicionamento
+            </button>
+            <button class="btn btn-secondary" onclick="limpar()">
+              🔄 Limpar
+            </button>
+          </div>
+
+          <div>
+            <div id="resultado" class="calc-resultado">
+              <div class="icon" id="result-icon">↓</div>
+              <h3 id="result-titulo">Abaixo do Mercado</h3>
+              <div class="valor" id="result-valor">R$ 0,00</div>
+              <p class="comparacao" id="result-texto">Comparado com média de R$ 4.195,99</p>
+            </div>
+
+            <div style="background: var(--bg); padding: 20px; border-radius: 12px; margin-top: 20px;">
+              <h4 style="font-size: 14px; margin-bottom: 12px;">📌 Referências do Mercado</h4>
+              <div style="font-size: 13px; color: var(--text-sec);">
+                <p><strong>CNA:</strong> R$ 4.560,92 (anual)</p>
+                <p><strong>Wizard:</strong> R$ 4.550,04 (anual)</p>
+                <p><strong>Cultura:</strong> R$ 2.388,31* (semestral)</p>
+                <p style="margin-top: 12px;"><strong>Média (anual):</strong> R$ 4.195,99</p>
+                <p style="font-size: 11px; margin-top: 8px;">* Cultura = semestral × 2 para anual</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>Análise de Mercado — Escolas de Idiomas Araruama/RJ</p>
+    <p style="margin-top: 8px;">Dados coletados entre 12 e 20 de agosto de 2026</p>
+  </footer>
+
+  <script>
+    // Referências do mercado
+    const MERCADO = {
+      adulto: {
+        cna: 4560.92,
+        wizard: 4550.04,
+        cultura: 2388.31 * 2, // semestral × 2
+        media: 4155.99
+      }
+    };
+
+    // Tabs
+    function showTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+      document.getElementById('tab-' + tab).style.display = 'block';
+      event.target.classList.add('active');
+    }
+
+    // Calculadora
+    function calcular() {
+      const matricula = parseFloat(document.getElementById('ccaa-matricula').value) || 0;
+      const mensalidade = parseFloat(document.getElementById('ccaa-mensalidade').value) || 0;
+      const parcelas = parseInt(document.getElementById('ccaa-parcelas').value) || 12;
+      const material = parseFloat(document.getElementById('ccaa-material').value) || 0;
+
+      const total = matricula + (mensalidade * parcelas) + material;
+      const media = MERCADO.adulto.media;
+
+      const resultado = document.getElementById('resultado');
+      const icon = document.getElementById('result-icon');
+      const titulo = document.getElementById('result-titulo');
+      const valor = document.getElementById('result-valor');
+      const texto = document.getElementById('result-texto');
+
+      resultado.classList.remove('abaixo', 'alinhado', 'acima', 'show');
+
+      if (total === 0) {
+        resultado.classList.remove('show');
+        return;
+      }
+
+      const tolerancia = media * 0.1; // 10%
+      const diff = total - media;
+
+      if (total < media - tolerancia) {
+        resultado.classList.add('abaixo', 'show');
+        icon.textContent = '↓';
+        titulo.textContent = 'Abaixo do Mercado';
+        texto.textContent = `Você está ${formatCurrency(media - total)} mais barato que a média`;
+      } else if (total > media + tolerancia) {
+        resultado.classList.add('acima', 'show');
+        icon.textContent = '↑';
+        titulo.textContent = 'Acima do Mercado';
+        texto.textContent = `Você está ${formatCurrency(total - media)} mais caro que a média`;
+      } else {
+        resultado.classList.add('alinhado', 'show');
+        icon.textContent = '✓';
+        titulo.textContent = 'Alinhado ao Mercado';
+        texto.textContent = `Dentro da faixa de ±10% da média (R$ ${formatNumber(media - tolerancia)} a R$ ${formatNumber(media + tolerancia)})`;
+      }
+
+      valor.textContent = formatCurrency(total);
+    }
+
+    function limpar() {
+      document.getElementById('ccaa-matricula').value = '';
+      document.getElementById('ccaa-mensalidade').value = '';
+      document.getElementById('ccaa-parcelas').value = '12';
+      document.getElementById('ccaa-material').value = '';
+      document.getElementById('resultado').classList.remove('show');
+    }
+
+    function formatCurrency(val) {
+      return 'R$ ' + val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatNumber(val) {
+      return val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+  </script>
+</body>
+</html>
